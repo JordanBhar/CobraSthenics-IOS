@@ -6,20 +6,44 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct CobraSthenicsApp: App {
-
-    @State private var environment = AppEnvironment.preview
 
     var body: some Scene {
 
         WindowGroup {
 
-            AppShell()
-                .environment(environment)
+            RootView()
                 .preferredColorScheme(.dark)
         }
+        .modelContainer(for: [
+            User.self,
+            UserProgramProgress.self,
+            UserExercise.self,
+            Achievement.self,
+            Exercise.self,
+            Workout.self,
+            WorkoutExercise.self,
+            WorkoutSession.self,
+            WorkoutSessionExercise.self,
+            Program.self,
+            Skill.self,
+            ProgressEntry.self,
+            PersonalRecord.self
+        ])
+    }
+}
+
+private struct RootView: View {
+    @Environment(\.modelContext) private var modelContext
+
+    var body: some View {
+        AppShell()
+            .task {
+                Seeder.seedIfEmpty(modelContext)
+            }
     }
 }
 

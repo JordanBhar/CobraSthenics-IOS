@@ -2,8 +2,6 @@ import SwiftUI
 
 public struct AppShell: View {
 
-    @Environment(AppEnvironment.self) private var environment
-
     @State private var selectedTab: AppTab = .home
 
     public init() {}
@@ -13,11 +11,7 @@ public struct AppShell: View {
         TabView(selection: $selectedTab) {
 
             NavigationStack {
-                HomeView(
-                    viewModel: HomeViewModel(
-                        homeRepository: environment.homeRepository
-                    )
-                )
+                HomeView()
             }
             .tabItem {
                 Label(NavigationTabConstants.home, systemImage: NavigationTabConstants.homeIconString)
@@ -25,23 +19,15 @@ public struct AppShell: View {
             .tag(AppTab.home)
 
             NavigationStack {
-                TrainView(
-                    viewModel: TrainViewModel(
-                        workoutRepository: environment.workoutRepository
-                    )
-                )
+                WorkoutView()
             }
             .tabItem {
-                Label(NavigationTabConstants.train, systemImage: NavigationTabConstants.trainIconString)
+                Label(NavigationTabConstants.workout, systemImage: NavigationTabConstants.workoutIconString)
             }
-            .tag(AppTab.train)
+            .tag(AppTab.workout)
 
             NavigationStack {
-                LibraryView(
-                    viewModel: LibraryViewModel(
-                        exerciseRepository: environment.exerciseRepository
-                    )
-                )
+                LibraryView()
             }
             .tabItem {
                 Label(NavigationTabConstants.library, systemImage: NavigationTabConstants.libraryIconString)
@@ -49,11 +35,7 @@ public struct AppShell: View {
             .tag(AppTab.library)
 
             NavigationStack {
-                SkillsView(
-                    viewModel: SkillsViewModel(
-                        skillRepository: environment.skillRepository
-                    )
-                )
+                SkillsView()
             }
             .tabItem {
                 Label(NavigationTabConstants.skills, systemImage: NavigationTabConstants.skillsIconString)
@@ -61,12 +43,7 @@ public struct AppShell: View {
             .tag(AppTab.skills)
 
             NavigationStack {
-                ProfileView(
-                    viewModel: ProfileViewModel(
-                        userRepository: environment.userRepository,
-                        settingsRepository: environment.settingsRepository
-                    )
-                )
+                ProfileView()
             }
             .tabItem {
                 Label(NavigationTabConstants.profile, systemImage: NavigationTabConstants.profileIconString)
@@ -80,7 +57,7 @@ public struct AppShell: View {
 
 private enum AppTab: Hashable {
     case home
-    case train
+    case workout
     case library
     case skills
     case profile
@@ -88,5 +65,4 @@ private enum AppTab: Hashable {
 
 #Preview {
     AppShell()
-        .environment(AppEnvironment.preview)
 }
