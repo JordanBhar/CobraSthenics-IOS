@@ -1,15 +1,16 @@
 # CobraSthenics — Product Requirements Document
 
-**Version:** 3.0.0  
-**Date:** 2026-05-24  
-**Status:** Approved  
-**Owner:** Product Team  
-**Platform:** Native iOS — SwiftUI + Firebase
+**Version:** 3.1.0
+**Date:** 2026-05-28
+**Status:** Vision + scoped roadmap; current implementation status documented in §0
+**Owner:** Product Team
+**Platform:** Native iOS — SwiftUI
 
 ---
 
 ## Table of Contents
 
+0. [Implementation Status](#0-implementation-status)
 1. [Product Overview](#1-product-overview)
 2. [Target Users](#2-target-users)
 3. [Feature List](#3-feature-list)
@@ -17,6 +18,55 @@
 5. [Screen List](#5-screen-list)
 6. [Core Data Entities](#6-core-data-entities)
 7. [Technical Requirements](#7-technical-requirements)
+
+---
+
+## 0. Implementation Status
+
+This PRD describes the full product vision. The current codebase implements a subset of that vision and runs entirely from sample data. The status table below maps each feature group to its current state so this document stays useful as both the roadmap and a reality check.
+
+### 0.1 What ships in the app today
+
+The app launches into `AppShell`, a five-tab `TabView` (Home · Train · Library · Skills · Profile) wired through `AppEnvironment.preview`. Every repository is a `Sample*` implementation reading from `Shared/SampleData/SampleData.swift`. The visual system is dark-only with the design system defined under `Shared/DesignSystem/`.
+
+| Feature group | Section | Status | Notes |
+|---|---|---|---|
+| Onboarding & profile | §3.1 | **Not implemented** | No splash, no auth, no onboarding wizard. App launches directly to Home. Profile tab is read-only. |
+| Workout tracking | §3.2 | **Partial** | Train tab shows program hero + workout tiles. No active workout screen, set logging, rest timer, history, or notes. |
+| Exercise database | §3.3 | **Partial** | Library tab + Category + Exercise Detail are implemented. 3 sample exercises ship today. No real search across exercises, no custom exercise creation, no video playback (only `ExerciseVideoSection` placeholder). |
+| Skill progression | §3.4 | **Partial** | Skills tab + Skill Detail are implemented. 5 sample skills ship. No timed-hold session screen, no skill goal setting, no milestone tracking. |
+| Training programs | §3.5 | **Read-only sample** | `ActiveProgram` ships through `ProgramRepository` and renders on Home + Train. No program browser, builder, scheduler, or adherence tracker. |
+| Body metrics | §3.6 | **Not implemented** | No screens, no entities, no repository. |
+| Progress photos | §3.7 | **Not implemented** | No screens, no entities, no repository. |
+| Analytics dashboard | §3.8 | **Partial** | `ProfileSnapshot` carries heatmap, weekly volume, muscle breakdown, skill trends. Only PRs are rendered today. `HeatmapGrid` and `MiniBarChart` design-system primitives exist but have no consumer. |
+| Push notifications | §3.9 | **UI only** | `NotificationsSettingsView` and `WorkoutRemindersView` render the preference UI. No FCM integration, no scheduling, no permission handling. |
+| Subscription system | §3.10 | **UI only** | `SubscriptionView` renders a hero + plan picker. No StoreKit, no RevenueCat, no entitlement validation. |
+
+### 0.2 Tech stack actually in use
+
+| Component | Current implementation |
+|---|---|
+| Frontend | SwiftUI |
+| State management | Observation framework (`@Observable @MainActor`) |
+| Navigation | `NavigationStack` per tab + `NavigationLink`; `SettingsRoute` enum used by `ProfileView.destination(for:)` |
+| Local storage | Declared as SwiftData `@Model` types under `Core/Persistence/`; **no `ModelContainer` wired at launch** |
+| Auth | Not implemented |
+| Backend / database | Not implemented (`FirebaseAdapterError.notImplemented` is the only Firebase symbol declared) |
+| Push notifications | Not implemented |
+| Subscriptions | Not implemented |
+| HTTP client | `NetworkClient` protocol with `URLSession` conformance — no consumer |
+| Serialization | `Codable` on domain entities (used today for sample fixture round-tripping) |
+
+### 0.3 Authoritative documentation pairings
+
+- `Docs/Architecture/architecture.md` — actual code layout, App layer, navigation, DI.
+- `Docs/Architecture/backend_architecture.md` — repository boundary + planned backend adapters.
+- `Docs/Architecture/database.md` — current persistence types + target schema.
+- `Docs/Design/*.md` — design system, UI rules, animations, branding.
+- `Docs/Features/*.md` — per-feature current state.
+- `Docs/Engineering/source_of_truth.md` — AI/engineering reference.
+
+When sections §1–§7 below describe a feature, screen, or entity that does not yet exist in the code, treat that section as **target scope**, not current behaviour. The Implementation Status table in §0.1 is the authoritative answer to "is this built?".
 
 ---
 
