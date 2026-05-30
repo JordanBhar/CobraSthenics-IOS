@@ -21,7 +21,7 @@ Features/   - vertical product slices (Domain / Data / Presentation)
 Resources/  - Assets.xcassets
 ```
 
-There is no Firebase, network, or SwiftData store wired into runtime today. `Core/Persistence` declares SwiftData `@Model` types and `Core/Networking` declares a `NetworkClient` protocol — these are scaffolding for the future production data layer described in `backend_architecture.md`.
+There is no Supdabase, network, or SwiftData store wired into runtime today. `Core/Persistence` declares SwiftData `@Model` types and `Core/Networking` declares a `NetworkClient` protocol — these are scaffolding for the future production data layer described in `backend_architecture.md`.
 
 ---
 
@@ -409,7 +409,7 @@ Features/<X>/Presentation
 Features/<X>/Data
   depends on: Features/<X>/Domain
   uses: Foundation, Shared/SampleData (today)
-  will use: Firebase iOS SDKs, SwiftData ModelContainer, URLSession (planned)
+  will use: Supabase iOS SDKs, SwiftData ModelContainer, URLSession (planned)
 
 Features/<X>/Domain
   uses: Foundation (and SwiftUI where Color projections are exposed)

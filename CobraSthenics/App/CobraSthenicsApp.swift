@@ -34,6 +34,9 @@ struct CobraSthenicsApp: App {
             PersonalRecord.self
         ])
     }
+    
+    
+    
 }
 
 private struct RootView: View {
